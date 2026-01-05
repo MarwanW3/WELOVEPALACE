@@ -10,13 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-<<<<<<< Updated upstream
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-=======
->>>>>>> Stashed changes
 
 @Service
 public class FootballApiService {
@@ -24,21 +21,14 @@ public class FootballApiService {
     @Value("${football.api.key}")
     private String apiKey;
 
-<<<<<<< Updated upstream
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    public List<MatchDto> getMatches() throws Exception {
-=======
-    @Value("${football.api.base-url}")
+    @Value("${football.api.base-url:https://api.football-data.org/v4}")
     private String baseUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public String getPremierLeagueMatches() {
-
-        String url = baseUrl + "/matches";
->>>>>>> Stashed changes
+    public List<MatchDto> getPremierLeagueMatches() throws Exception {
+        String url = baseUrl + "/competitions/PL/matches";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Auth-Token", apiKey);
@@ -46,14 +36,7 @@ public class FootballApiService {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response =
-<<<<<<< Updated upstream
-                restTemplate.exchange(
-                        "https://api.football-data.org/v4/competitions/PL/matches",
-                        HttpMethod.GET,
-                        entity,
-                        String.class
-                );
-
+                restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
         JsonNode root = mapper.readTree(response.getBody());
         JsonNode matches = root.get("matches");
@@ -63,7 +46,7 @@ public class FootballApiService {
         for (JsonNode match : matches) {
             String status = match.get("status").asText();
 
-            if (status.equals("FINISHED") || status.equals("SCHEDULED")) {
+            if (status.equals("FINISHED") || status.equals("SCHEDULED") || status.equals("TIMED")) {
                 result.add(new MatchDto(
                         match.get("homeTeam").get("name").asText(),
                         match.get("awayTeam").get("name").asText(),
@@ -75,18 +58,8 @@ public class FootballApiService {
                                 match.get("score").get("fullTime").get("away").asInt()
                 ));
             }
-
-
-
         }
 
         return result;
-=======
-                restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        return response.getBody();
->>>>>>> Stashed changes
     }
 }
-
-
