@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Spring Boot-app",
+            "request": "launch",
+            "mainClass": "com.welovepalace.WelovePalaceApplication",
+            "env": {
+                "football.api.key": "6865807a3d8e479085b00dd2f5d0d16d",
+                "football.api.base-url": "https://api.football-data.org/v4"
+            }
+        }
+    ]
+}

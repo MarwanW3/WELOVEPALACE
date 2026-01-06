@@ -1,0 +1,54 @@
+/* global css  */
+html{
+    background-color: darkslateblue;
+}
+
+body{
+    background-color: darkslateblue;
+}
+header h1{
+    text-shadow: 7px 3px 3px #01005f;    
+}
+header {
+    text-align: center;
+}
+header a{
+    text-decoration: none;
+    color: white;
+    font-size: 50px;
+    color: white;
+    margin-top: 3%;
+}
+
+/* start sidan css  */
+
+main p {
+    text-align: center;
+    font-size: 20px;
+    width: 100%;
+    background-color: white;
+}
+.p-4{
+ text-align: center;   
+}
+
+.size-10{
+    margin: auto;
+}
+.list{
+    padding: 32px;
+    box-shadow: 18px -10px 13px 0px #21005fba
+}
+
+.score{
+   padding: 0 20px;
+}
+.join-item{
+    height: 40px;
+    margin: auto 0;
+    width: 5%;
+    background-color: black;
+    color: aliceblue;
+    border-radius: 30% 40%;
+}
+
