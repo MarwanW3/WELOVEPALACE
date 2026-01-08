@@ -28,3 +28,7 @@ build/
 .idea/
 *.bin
 *.lock
+# ignorera API nyckeln
+/src/main/resources/application.properties
+
+
