@@ -28,3 +28,7 @@ build/
 .idea/
 *.bin
 *.lock
+
+# ignorera nyckel
+/src/main/resources/application.properties
+
