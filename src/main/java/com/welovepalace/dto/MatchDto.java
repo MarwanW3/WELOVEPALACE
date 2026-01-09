@@ -10,6 +10,16 @@ public class MatchDto {
     private String status;
     private Integer homeScore;
     private Integer awayScore;
+    private Integer predictedHomeScore;
+    private Integer predictedAwayScore;
+
+
+    public Integer getPredictedHomeScore() { return predictedHomeScore; }
+    public void setPredictedHomeScore(Integer predictedHomeScore) { this.predictedHomeScore = predictedHomeScore; }
+
+    public Integer getPredictedAwayScore() { return predictedAwayScore; }
+    public void setPredictedAwayScore(Integer predictedAwayScore) { this.predictedAwayScore = predictedAwayScore; }
+
 
     public MatchDto(String homeTeam, String awayTeam, OffsetDateTime utcDate, String status, Integer homeScore, Integer awayScore) {
 
