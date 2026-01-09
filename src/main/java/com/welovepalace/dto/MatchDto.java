@@ -11,6 +11,8 @@ public class MatchDto {
     private Integer homeScore;
     private Integer awayScore;
 
+
+
     public MatchDto(String homeTeam, String awayTeam, OffsetDateTime utcDate, String status, Integer homeScore, Integer awayScore) {
 
         this.homeTeam = homeTeam;
@@ -44,4 +46,6 @@ public class MatchDto {
     public Integer getAwayScore() {
         return awayScore;
     }
+
+
 }
