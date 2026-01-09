@@ -28,3 +28,4 @@ build/
 .idea/
 *.bin
 *.lock
+.idea/workspace.xml
