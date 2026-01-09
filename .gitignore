@@ -28,6 +28,8 @@ build/
 .idea/
 *.bin
 *.lock
+.idea/workspace.xml
+
 
 # ignorera nyckel
 /src/main/resources/application.properties
