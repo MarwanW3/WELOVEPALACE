@@ -21,6 +21,8 @@ public class MatchDto {
     public void setPredictedAwayScore(Integer predictedAwayScore) { this.predictedAwayScore = predictedAwayScore; }
 
 
+
+
     public MatchDto(String homeTeam, String awayTeam, OffsetDateTime utcDate, String status, Integer homeScore, Integer awayScore) {
 
         this.homeTeam = homeTeam;
@@ -54,4 +56,6 @@ public class MatchDto {
     public Integer getAwayScore() {
         return awayScore;
     }
+
+
 }

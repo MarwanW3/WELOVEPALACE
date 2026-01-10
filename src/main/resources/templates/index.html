@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>start sida</title>
+        <link rel="stylesheet" href="style.css">
+        
+       
+        
+    </head>
+
+    <body>
+        <header>
+            <h1> <a href="index.html">WELOVEPALACE</a></h1>
+        </header>
+
+
+        <main>
+
+            <ul class="list bg-base-100 rounded-box shadow-md">
+
+                <li class="list-row"><h4>Upcoming games</h4></li>
+            
+                <li class="list-row" th:each="match : ${matches}" th:if="${match.status != 'FINISHED' and match.utcDate.isBefore(endOfWeek)}">
+                    <div i>
+                         <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
+                    </div>
+
+                    <P>VS</P>
+    
+                    
+                    <div>
+                        <p th:text="${match.awayTeam}">Bortalag</p>
+                    </div>
+
+                    <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+                </li>
+                    
+                 
+            </ul>
+
+            <ul class="list bg-base-100 rounded-box shadow-md" id="finished-matches">
+                <li class="list-row"><h4>Played games</h4></li>
+
+                <li th:each="match : ${matches}" th:if="${match.status == 'FINISHED' and match.utcDate.isAfter(lastWeek) }" class="list-row">
+                    <div>
+                        <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
+                    </div>
+
+                    <div class="score">
+                        <p>VS</p>
+                        <p th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
+                    </div>
+
+                    <div>
+                        <p th:text="${match.awayTeam}">Bortalag</p>
+                    </div>
+
+                    <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+
+                </li>
+            </ul>
+                        
+        </main>
+        
+    </body>
+</html>
