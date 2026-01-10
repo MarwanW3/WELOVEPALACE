@@ -45,7 +45,7 @@ main h4{
     padding: 32px;
     box-shadow: 18px -10px 13px 0px #21005fba;
     max-height: 1000px;
-    overflow : overlay;
+    overflow : auto;
 }
 main{
     display: flex;
@@ -63,4 +63,41 @@ main{
     border-radius: 20px;
     position: sticky;
     top: 0px;
+}
+/* Flashy Predict Score knapp */
+.predict-btn {
+    background: linear-gradient(90deg, #6a5acd, #00bfff);
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.predict-btn:hover {
+    background: linear-gradient(90deg, #00bfff, #6a5acd);
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+
+.prediction {
+    font-weight: bold;
+    color: #ff4500;
+    margin-top: 5px;
+    font-size: 1.1em;
+    transition: opacity 0.3s ease;
+}
+/* Flash animation för prediktion */
+@keyframes flash {
+    0%   { opacity: 0; transform: scale(0.9); }
+    50%  { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.prediction.show {
+    animation: flash 0.5s ease-out;
 }

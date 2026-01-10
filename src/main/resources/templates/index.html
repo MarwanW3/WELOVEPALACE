@@ -1,68 +1,95 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>start sida</title>
-        <link rel="stylesheet" href="style.css">
-        
-       
-        
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELOVEPALACE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1><a href="index.html">WELOVEPALACE</a></h1>
+</header>
 
-    <body>
-        <header>
-            <h1> <a href="index.html">WELOVEPALACE</a></h1>
-        </header>
+<main>
+    <!-- Upcoming games -->
+    <ul class="list bg-base-100 rounded-box shadow-md">
+        <li class="list-row"><h4>Upcoming games</h4></li>
 
+        <li class="list-row" th:each="match, iterStat : ${upcomingMatches}">
+            <div>
+                <p th:text="${match.homeTeam}" class="bild_text">Hemmalag</p>
+            </div>
 
-        <main>
+            <p>VS</p>
 
-            <ul class="list bg-base-100 rounded-box shadow-md">
+            <div>
+                <p th:text="${match.awayTeam}">Bortalag</p>
+            </div>
 
-                <li class="list-row"><h4>Upcoming games</h4></li>
-            
-                <li class="list-row" th:each="match : ${matches}" th:if="${match.status != 'FINISHED' and match.utcDate.isBefore(endOfWeek)}">
-                    <div i>
-                         <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
-                    </div>
+            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
 
-                    <P>VS</P>
-    
-                    
-                    <div>
-                        <p th:text="${match.awayTeam}">Bortalag</p>
-                    </div>
+            <!-- Flashy knapp för score prediction -->
+            <button class="predict-btn" th:attr="data-index=${iterStat.index}">
+                Predict Score
+            </button>
 
-                    <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
-                </li>
-                    
-                 
-            </ul>
+            <!-- Här visas prediktionen när knappen klickas -->
+            <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
+        </li>
+    </ul>
 
-            <ul class="list bg-base-100 rounded-box shadow-md" id="finished-matches">
-                <li class="list-row"><h4>Played games</h4></li>
+    <!-- Finished games -->
+    <ul class="list bg-base-100 rounded-box shadow-md" id="finished-matches">
+        <li class="list-row"><h4>Played games</h4></li>
 
-                <li th:each="match : ${matches}" th:if="${match.status == 'FINISHED' and match.utcDate.isAfter(lastWeek) }" class="list-row">
-                    <div>
-                        <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
-                    </div>
+        <li class="list-row" th:each="match : ${finishedMatches}">
+            <div>
+                <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
+            </div>
 
-                    <div class="score">
-                        <p>VS</p>
-                        <p th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
-                    </div>
+            <div class="score">
+                <p>VS</p>
+                <p th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
+            </div>
 
-                    <div>
-                        <p th:text="${match.awayTeam}">Bortalag</p>
-                    </div>
+            <div>
+                <p th:text="${match.awayTeam}">Bortalag</p>
+            </div>
 
-                    <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+        </li>
+    </ul>
+</main>
 
-                </li>
-            </ul>
-                        
-        </main>
-        
-    </body>
+<!-- JavaScript längst ner -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll(".predict-btn");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                const index = this.getAttribute("data-index");
+                const predictionElem = document.getElementById("prediction-" + index);
+
+                fetch(`/predictScoreAjax?matchIndex=${index}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.homeScore !== undefined && data.awayScore !== undefined){
+                            predictionElem.innerHTML = data.homeScore + " - " + data.awayScore;
+                            predictionElem.classList.add("show");
+                            setTimeout(() => predictionElem.classList.remove("show"), 600);
+                        } else {
+                            predictionElem.innerHTML = "No prediction available";
+                        }
+                    })
+                    .catch(err => {
+                        predictionElem.innerHTML = "Error predicting score";
+                        console.error(err);
+                    });
+            });
+        });
+    });
+</script>
+</body>
 </html>
