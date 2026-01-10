@@ -68,10 +68,10 @@ public class FootballApiService {
             }
         }
 
-        // ✅ Upcoming: tidigast match först
+        //Upcoming: tidigast match först
         upcoming.sort((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()));
 
-        // ✅ Finished: senaste match först
+        //Finished: senaste match först
         finished.sort((a, b) -> b.getUtcDate().compareTo(a.getUtcDate()));
 
         // Slå ihop
@@ -83,7 +83,7 @@ public class FootballApiService {
     }
 
 
-    // Skapar score predictions
+
     // Skapar score predictions med realistisk variation
     public void predictScores(List<MatchDto> matches) {
         Map<String, List<Integer>> homeGoals = new HashMap<>();

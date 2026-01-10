@@ -115,6 +115,6 @@ public class MatchController {
             );
         }
 
-        return Map.of(); // tomt svar om index är fel
+        return Map.of();
     }
 }
