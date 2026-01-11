@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,22 +69,25 @@
 
         buttons.forEach(button => {
             button.addEventListener("click", function() {
+
+                if (this.disabled) return;
+
+                this.disabled = true;
+                this.innerText = "Predicted";
+
                 const index = this.getAttribute("data-index");
                 const predictionElem = document.getElementById("prediction-" + index);
 
                 fetch(`/predictScoreAjax?matchIndex=${index}`)
                     .then(response => response.json())
                     .then(data => {
-                        if(data.homeScore !== undefined && data.awayScore !== undefined){
-                            predictionElem.innerHTML = data.homeScore + " - " + data.awayScore;
-                            predictionElem.classList.add("show");
-                            setTimeout(() => predictionElem.classList.remove("show"), 600);
-                        } else {
-                            predictionElem.innerHTML = "No prediction available";
-                        }
+                        predictionElem.innerHTML = data.homeScore + " - " + data.awayScore;
+                        predictionElem.classList.add("show");
                     })
                     .catch(err => {
-                        predictionElem.innerHTML = "Error predicting score";
+                        predictionElem.innerHTML = "Prediction not available";
+                        this.disabled = false;
+                        this.innerText = "Predict Score";
                         console.error(err);
                     });
             });

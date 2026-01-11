@@ -164,7 +164,7 @@ public class FootballApiService {
         double predictedHome = (avgHomeFor + avgAwayAgainst) / 2 + 0.25;
         double predictedAway = (avgAwayFor + avgHomeAgainst) / 2;
 
-        // Lägg till realistisk variation ±1 mål
+        // Lite realistisk variation
         Random rand = new Random();
         int finalHome = Math.max(0, (int) Math.round(predictedHome + rand.nextInt(3) - 1));
         int finalAway = Math.max(0, (int) Math.round(predictedAway + rand.nextInt(3) - 1));
