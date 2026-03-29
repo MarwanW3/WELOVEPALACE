@@ -31,8 +31,10 @@ build/
 .idea/workspace.xml
 
 
-# ignorera nyckel
-/src/main/resources/application.properties
-
-#ignorera README.md
-README.md
+#ide junk
+.gradle/
+build/
+*.log
+*.lock
+*.bin
+.idea/
