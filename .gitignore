@@ -31,9 +31,6 @@ build/
 .idea/workspace.xml
 
 
-#ignorera README.md
-README.md
-
 #ide junk
 .gradle/
 build/
