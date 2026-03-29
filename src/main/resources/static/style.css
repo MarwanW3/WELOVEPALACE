@@ -105,3 +105,9 @@ main{
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.prediction-explanation {
+    margin-top: 6px;
+    font-size: 0.95em;
+    color: #333;
+}

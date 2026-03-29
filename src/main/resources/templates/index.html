@@ -36,6 +36,7 @@
 
             <!-- Här visas prediktionen när knappen klickas -->
             <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
+            <p class="prediction-explanation" th:attr="id='prediction-explanation-' + ${iterStat.index}"></p>
         </li>
     </ul>
 
@@ -69,26 +70,44 @@
 
         buttons.forEach(button => {
             button.addEventListener("click", function() {
-
                 if (this.disabled) return;
 
                 this.disabled = true;
-                this.innerText = "Predicted";
+                this.innerText = "Loading...";
 
                 const index = this.getAttribute("data-index");
                 const predictionElem = document.getElementById("prediction-" + index);
+                const explanationElem = document.getElementById("prediction-explanation-" + index);
+
+                predictionElem.innerHTML = "";
+                explanationElem.innerHTML = "";
 
                 fetch(`/predictScoreAjax?matchIndex=${index}`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("HTTP error " + response.status);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        predictionElem.innerHTML = data.homeScore + " - " + data.awayScore;
+                        console.log("Prediction response:", data);
+
+                        predictionElem.innerHTML = `${data.homeScore} - ${data.awayScore}`;
                         predictionElem.classList.add("show");
+
+                        if (data.explanation) {
+                            explanationElem.innerHTML = data.explanation;
+                            explanationElem.classList.add("show");
+                        }
+
+                        this.innerText = "Predicted";
                     })
                     .catch(err => {
                         predictionElem.innerHTML = "Prediction not available";
+                        explanationElem.innerHTML = "";
                         this.disabled = false;
                         this.innerText = "Predict Score";
-                        console.error(err);
+                        console.error("Prediction error:", err);
                     });
             });
         });
