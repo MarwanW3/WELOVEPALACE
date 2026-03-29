@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELOVEPALACE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="games.css">
+
+</head>
+<body>
+<header>
+    <h1><a href="/">WELOVEPALACE</a></h1>
+</header>
+
+<aside>
+    <a href="upcoming_games">Upcoming Games</a>
+    <a href="finished_games">Played games</a>
+</aside>
+
+<main>
+    <!-- Upcoming games -->
+    <ul class="list bg-base-100 rounded-box shadow-md">
+        <li class="list-row"><h4>Upcoming games</h4></li>
+
+        <li class="list-row" th:each="match, iterStat : ${upcomingMatches}">
+            <div>
+                <p th:text="${match.homeTeam}" class="bild_text">Hemmalag</p>
+            </div>
+
+            <p>VS</p>
+
+            <div>
+                <p th:text="${match.awayTeam}">Bortalag</p>
+            </div>
+
+            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+
+            <!-- Flashy knapp för score prediction -->
+            <button class="predict-btn" th:attr="data-index=${iterStat.index}">
+                Predict Score
+            </button>
+
+            <!-- Här visas prediktionen när knappen klickas -->
+            <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
+            <p class="prediction-explanation" th:attr="id='prediction-explanation-' + ${iterStat.index}"></p>
+        </li>
+    </ul>
+</main>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll(".predict-btn");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                if (this.disabled) return;
+
+                this.disabled = true;
+                this.innerText = "Loading...";
+
+                const index = this.getAttribute("data-index");
+                const predictionElem = document.getElementById("prediction-" + index);
+                const explanationElem = document.getElementById("prediction-explanation-" + index);
+
+                predictionElem.innerHTML = "";
+                explanationElem.innerHTML = "";
+
+                fetch(`/api/predict?matchIndex=${index}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("HTTP error " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Prediction response:", data);
+
+                        predictionElem.innerHTML = `${data.homeScore} - ${data.awayScore}`;
+                        predictionElem.classList.add("show");
+
+                        if (data.explanation) {
+                            explanationElem.innerHTML = data.explanation;
+                            explanationElem.classList.add("show");
+                        }
+
+                        this.innerText = "Predicted";
+                    })
+                    .catch(err => {
+                        predictionElem.innerHTML = "Prediction not available";
+                        explanationElem.innerHTML = "";
+                        this.disabled = false;
+                        this.innerText = "Predict Score";
+                        console.error("Prediction error:", err);
+                    });
+            });
+        });
+    });
+</script>
+</body>
+</html>
