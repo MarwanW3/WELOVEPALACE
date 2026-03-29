@@ -68,7 +68,13 @@ public class MatchController {
         return "redirect:/";
     }
 
-    @GetMapping("/predictScoreAjax")
+    /**
+     * Predicts the score for a given match.
+     *
+     * @param matchIndex index of the match in the current list
+     * @return predicted home score, away score and explanation
+     */
+    @GetMapping("/api/predict")
     @ResponseBody
     public Map<String, Object> predictScoreAjax(Integer matchIndex) {
         try {

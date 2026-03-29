@@ -82,7 +82,7 @@
                 predictionElem.innerHTML = "";
                 explanationElem.innerHTML = "";
 
-                fetch(`/predictScoreAjax?matchIndex=${index}`)
+                fetch(`/api/predict?matchIndex=${index}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error("HTTP error " + response.status);
