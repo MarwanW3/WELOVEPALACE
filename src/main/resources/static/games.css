@@ -1,0 +1,97 @@
+main {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+
+main ul.list {
+    list-style-type: none;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    padding: 0;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: auto;
+    max-height: 800px;
+}
+
+main h4 {
+    margin: 0;
+    padding: 30px;
+    background: #f8f9fa;
+    color: darkslateblue;
+    font-size: 28px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.list-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.list-row:hover {
+    background-color: #fcfaff;
+}
+
+.list-row div {
+    text-align: center;
+    width: 100%;
+}
+
+.list-row p {
+    margin: 8px 0;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.predict-btn {
+    background: linear-gradient(135deg, #6a5acd, #483d8b);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(106, 90, 205, 0.3);
+    transition: transform 0.2s;
+}
+
+.predict-btn:hover {
+    transform: scale(1.05);
+}
+
+
+.prediction {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ff4500;
+    margin: 15px 0;
+    display: block;
+}
+
+.prediction-explanation {
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+    max-width: 80% !important;
+}
+
+.prediction.show {
+    animation: bounceIn 0.5s ease;
+}
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}

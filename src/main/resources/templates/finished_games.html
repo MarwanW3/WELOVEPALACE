@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELOVEPALACE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="games.css">
+</head>
+<body>
+<header>
+    <h1><a href="/">WELOVEPALACE</a></h1>
+</header>
+
+<aside>
+    <a href="upcoming_games">Upcoming Games</a>
+    <a href="finished_games">Played games</a>
+</aside>
+
+<main>
+    <ul class="list bg-base-100 rounded-box shadow-md" id="finished-matches">
+        <li class="list-row"><h4>Played games</h4></li>
+
+        <li class="list-row" th:each="match : ${finishedMatches}">
+            <div>
+                <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
+            </div>
+
+            <div class="score">
+                <p>VS</p>
+                <p th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
+            </div>
+
+            <div>
+                <p th:text="${match.awayTeam}">Bortalag</p>
+            </div>
+
+            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
+        </li>
+    </ul>
+
+</main>
+
+</body>
+</html>

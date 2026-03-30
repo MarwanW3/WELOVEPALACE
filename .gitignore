@@ -38,5 +38,4 @@ build/
 *.lock
 *.bin
 .idea/
-
 .env
