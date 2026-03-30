@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WELOVEPALACE</title>
+    <title>WELOVEPALACE - Played</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="games.css">
 </head>
@@ -16,30 +16,49 @@
     <a href="upcoming_games">Upcoming Games</a>
     <a href="finished_games">Played games</a>
 </aside>
-
+<div class="search-container">
+    <input type="text" id="teamSearch" placeholder="Search for played games..." onkeyup="filterTeams()">
+</div>
 <main>
-    <ul class="list bg-base-100 rounded-box shadow-md" id="finished-matches">
-        <li class="list-row"><h4>Played games</h4></li>
+
+
+    <ul class="list bg-base-100 rounded-box shadow-md">
+        <li class="list-row-header"><h4>Played games</h4></li>
 
         <li class="list-row" th:each="match : ${finishedMatches}">
-            <div>
-                <p th:text="${match.homeTeam}" id="bild_text">Hemmalag</p>
-            </div>
+            <div class="match-info">
+                <div class="team home-team">
+                    <p th:text="${match.homeTeam}">Hemmalag</p>
+                </div>
 
-            <div class="score">
-                <p>VS</p>
-                <p th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
-            </div>
+                <div class="score-container">
+                    <p class="score-text" th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
+                    <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}" class="date-text"></p>
+                </div>
 
-            <div>
-                <p th:text="${match.awayTeam}">Bortalag</p>
+                <div class="team away-team">
+                    <p th:text="${match.awayTeam}">Bortalag</p>
+                </div>
             </div>
-
-            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
         </li>
     </ul>
-
 </main>
 
+<script>
+    function filterTeams() {
+        let input = document.getElementById('teamSearch');
+        let filter = input.value.toLowerCase();
+        let rows = document.querySelectorAll('.list-row');
+
+        rows.forEach(row => {
+            let rowText = row.innerText.toLowerCase();
+            if (rowText.includes(filter)) {
+                row.style.display = "flex";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
 </body>
 </html>

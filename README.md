@@ -148,8 +148,9 @@ Response:
 
 ## Notes
 
-If you receive errors:
 
+- Link to repository: https://github.com/MarwanW3/WELOVEPALACE 
+- If you receive errors
 - 401 Unauthorized → invalid OpenAI key
 - undefined - undefined → API request failed
 - Could not resolve placeholder → environment variables not set correctly  
