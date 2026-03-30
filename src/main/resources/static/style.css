@@ -12,7 +12,7 @@ header {
 
 header a {
     text-decoration: none;
-    color: #00ff85;
+    color: white;
     font-size: 50px;
     font-weight: 900;
     text-shadow: 7px 3px 3px #01005f;
@@ -23,6 +23,8 @@ aside {
     justify-content: center;
     gap: 30px;
     margin-bottom: 20px;
+    text-decoration: none;
+    color: white;
 }
 
 aside a {
@@ -36,3 +38,4 @@ aside a {
 aside a:hover {
     color: #00ff85;
 }
+
