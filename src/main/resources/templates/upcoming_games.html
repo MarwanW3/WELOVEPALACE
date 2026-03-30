@@ -18,34 +18,40 @@
     <a href="finished_games">Played games</a>
 </aside>
 
+    <div class="search-container">
+        <input type="text" id="teamSearch" placeholder="serach for upcoimg games..." onkeyup="filterTeams()">
+    </div>
 <main>
+     
     <!-- Upcoming games -->
     <ul class="list bg-base-100 rounded-box shadow-md">
-        <li class="list-row"><h4>Upcoming games</h4></li>
+    <li class="list-row-header"><h4>Upcoming games</h4></li>
 
-        <li class="list-row" th:each="match, iterStat : ${upcomingMatches}">
-            <div>
-                <p th:text="${match.homeTeam}" class="bild_text">Hemmalag</p>
+    <li class="list-row" th:each="match, iterStat : ${upcomingMatches}">
+        <div class="match-info">
+            <div class="team home-team">
+                <p th:text="${match.homeTeam}">Hemmalag</p>
             </div>
 
-            <p>VS</p>
+            <div class="vs-container">
+                <p class="vs-text">VS</p>
+                <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}" class="date-text"></p>
+            </div>
 
-            <div>
+            <div class="team away-team">
                 <p th:text="${match.awayTeam}">Bortalag</p>
             </div>
+        </div>
 
-            <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}"> </p>
-
-            <!-- Flashy knapp för score prediction -->
+        <div class="prediction-section">
             <button class="predict-btn" th:attr="data-index=${iterStat.index}">
                 Predict Score
             </button>
-
-            <!-- Här visas prediktionen när knappen klickas -->
             <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
             <p class="prediction-explanation" th:attr="id='prediction-explanation-' + ${iterStat.index}"></p>
-        </li>
-    </ul>
+        </div>
+    </li>
+</ul>
 </main>
 
 
@@ -97,6 +103,20 @@
             });
         });
     });
+    function filterTeams() {
+        let input = document.getElementById('teamSearch');
+        let filter = input.value.toLowerCase();
+        let rows = document.querySelectorAll('.list-row');
+
+        rows.forEach(row => {
+            let rowText = row.innerText.toLowerCase();
+            if (rowText.includes(filter)) {
+                row.style.display = "flex";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
 </script>
 </body>
 </html>
