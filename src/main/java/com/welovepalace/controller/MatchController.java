@@ -102,4 +102,32 @@ public class MatchController {
             );
         }
     }
+
+    @GetMapping("upcoming_games")
+    public String getUpcomingGames(Model model) throws Exception {
+        List<MatchDto> matches = footballApiService.getPremierLeagueMatches();
+        if (matches == null) matches = new ArrayList<>();
+
+        List<MatchDto> upcomingMatches = matches.stream()
+                .filter(m -> !"FINISHED".equals(m.getStatus()))
+                .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
+                .toList();
+
+        model.addAttribute("upcomingMatches", upcomingMatches);
+        return "upcoming_games";
+    }
+
+    @GetMapping("finished_games")
+    public String getFinishedGames(Model model) throws Exception {
+        List<MatchDto> matches = footballApiService.getPremierLeagueMatches();
+        if (matches == null) matches = new ArrayList<>();
+
+        List<MatchDto> finishedMatches = matches.stream()
+                .filter(m -> "FINISHED".equals(m.getStatus()))
+                .sorted((a, b) -> b.getUtcDate().compareTo(a.getUtcDate()))
+                .toList();
+
+        model.addAttribute("finishedMatches", finishedMatches);
+        return "finished_games";
+    }
 }
