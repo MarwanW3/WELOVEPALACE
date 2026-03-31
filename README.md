@@ -48,10 +48,10 @@ This project requires two API keys:
 
 The application uses environment variables, not hardcoded keys.
 
-If you do not set these correctly, the app will fail with errors like:
-
 To run the application you need to create a .env file with the following variables FOOTBALL_API_KEY=Your_Key_Here
 OPENAI_API_KEY=Your_Key_Here
+
+If you do not set these correctly, the app will fail with errors like:
 
 - 401 Unauthorized
 - Could not resolve placeholder OPENAI_API_KEY
