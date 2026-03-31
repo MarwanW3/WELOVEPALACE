@@ -16,10 +16,11 @@
     <a href="upcoming_games">Upcoming Games</a>
     <a href="finished_games">Played games</a>
 </aside>
-<div class="search-container">
-    <input type="text" id="teamSearch" placeholder="Search for played games..." onkeyup="filterTeams()">
-</div>
+
 <main>
+    <div class="search-container">
+        <input type="text" id="teamSearch" placeholder="Search for played games..." onkeyup="filterTeams()">
+    </div>
 
 
     <ul class="list bg-base-100 rounded-box shadow-md">
@@ -33,6 +34,9 @@
 
                 <div class="score-container">
                     <p class="score-text" th:text="${match.homeScore + ' - ' + match.awayScore}">0 - 0</p>
+
+                    <p class="vs-text">VS</p>
+
                     <p th:text="${#temporals.format(match.utcDate, 'dd MMM HH:mm')}" class="date-text"></p>
                 </div>
 
