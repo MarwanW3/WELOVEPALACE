@@ -45,11 +45,18 @@
             </div>
 
             <div class="prediction-section">
-                <button class="predict-btn" th:attr="data-index=${iterStat.index}">
-                    Predict Score
-                </button>
-                <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
-                <p class="prediction-explanation" th:attr="id='prediction-explanation-' + ${iterStat.index}"></p>
+                <div th:if="${match.predictedHomeScore != null}" class="server-mashup">
+                    <p class="prediction show" th:text="${match.predictedHomeScore + ' - ' + match.predictedAwayScore}"></p>
+                    <p class="prediction-explanation show">Game prediction.</p>
+                </div>
+
+                <div th:if="${match.predictedHomeScore == null}">
+                    <button class="predict-btn" th:attr="data-index=${iterStat.index}">
+                        Predict Score
+                    </button>
+                    <p class="prediction" th:attr="id='prediction-' + ${iterStat.index}"></p>
+                    <p class="prediction-explanation" th:attr="id='prediction-explanation-' + ${iterStat.index}"></p>
+                </div>
             </div>
         </li>
     </ul>
