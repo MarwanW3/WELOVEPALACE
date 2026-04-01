@@ -39,6 +39,7 @@ public class MatchController {
                 .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
                 .toList();
 
+
         List<MatchDto> finishedMatches = matches.stream()
                 .filter(m -> "FINISHED".equals(m.getStatus()))
                 .sorted((a, b) -> b.getUtcDate().compareTo(a.getUtcDate()))
@@ -51,8 +52,7 @@ public class MatchController {
         OffsetDateTime endOfWeek = startOfWeek.plusDays(6).withHour(23).withMinute(59).withSecond(59);
         OffsetDateTime lastWeek = now.minusDays(7);
 
-        model.addAttribute("upcomingMatches", upcomingMatches);
-        model.addAttribute("finishedMatches", finishedMatches);
+
         model.addAttribute("currentWeek", weekNumber);
         model.addAttribute("startOfWeek", startOfWeek);
         model.addAttribute("endOfWeek", endOfWeek);
@@ -81,8 +81,13 @@ public class MatchController {
             List<MatchDto> matches = footballApiService.getPremierLeagueMatches();
             if (matches == null) matches = new ArrayList<>();
 
-            if (matchIndex != null && matchIndex >= 0 && matchIndex < matches.size()) {
-                MatchDto match = matches.get(matchIndex);
+            List<MatchDto> upcomingMatches = matches.stream()
+                    .filter(m -> !"FINISHED".equals(m.getStatus()))
+                    .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
+                    .toList();
+
+            if (matchIndex != null && matchIndex >= 0 && matchIndex < upcomingMatches.size()) {
+                MatchDto match = upcomingMatches.get(matchIndex);
 
                 PredictionResultDto prediction = openAiPredictionService.predictScore(match, matches);
 
@@ -112,6 +117,16 @@ public class MatchController {
                 .filter(m -> !"FINISHED".equals(m.getStatus()))
                 .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
                 .toList();
+
+        List<MatchDto> topThree = upcomingMatches.stream().limit(3).toList();
+        for (MatchDto match : topThree) {
+            try {
+                PredictionResultDto prediction = openAiPredictionService.predictScore(match, matches);
+                match.setPredictedHomeScore(prediction.getHomeScore());
+                match.setPredictedAwayScore(prediction.getAwayScore());
+            } catch (Exception e) {
+            }
+        }
 
         model.addAttribute("upcomingMatches", upcomingMatches);
         return "upcoming_games";
