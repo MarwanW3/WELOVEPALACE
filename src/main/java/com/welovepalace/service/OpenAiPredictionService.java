@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 public class OpenAiPredictionService {
 
-    @Value("${openai.api.key}")
+    @Value("${OPENAI_API_KEY:${openai.api.key}}")
     private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();

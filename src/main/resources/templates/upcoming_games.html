@@ -64,67 +64,61 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        fetch("/api/matches/top5")
+            .then(res => res.json())
+            .then(matches => {
+
+                const rows = document.querySelectorAll(".list-row");
+
+                matches.forEach((match, index) => {
+
+                    const container = rows[index];
+                    if (!container) return;
+
+                    const box = document.createElement("div");
+                    box.className = "server-mashup";
+
+                    box.innerHTML = `
+                    <p class="prediction show">
+                        ${match.predictedHomeScore} - ${match.predictedAwayScore}
+                    </p>
+                    <p class="prediction-explanation show">
+                        AI Prediction
+                    </p>
+                `;
+
+                    container.querySelector(".prediction-section").innerHTML = "";
+                    container.querySelector(".prediction-section").appendChild(box);
+                });
+
+            });
+
         const buttons = document.querySelectorAll(".predict-btn");
 
         buttons.forEach(button => {
-            button.addEventListener("click", function() {
-                if (this.disabled) return;
-
-                this.disabled = true;
-                this.innerText = "Loading...";
+            button.addEventListener("click", function () {
 
                 const index = this.getAttribute("data-index");
+
                 const predictionElem = document.getElementById("prediction-" + index);
                 const explanationElem = document.getElementById("prediction-explanation-" + index);
 
-                predictionElem.innerHTML = "";
-                explanationElem.innerHTML = "";
-
                 fetch(`/api/predict?matchIndex=${index}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("HTTP error " + response.status);
-                        }
-                        return response.json();
-                    })
+                    .then(res => res.json())
                     .then(data => {
-                        console.log("Prediction response:", data);
 
                         predictionElem.innerHTML = `${data.homeScore} - ${data.awayScore}`;
-                        predictionElem.classList.add("show");
+                        explanationElem.innerHTML = data.explanation;
 
-                        if (data.explanation) {
-                            explanationElem.innerHTML = data.explanation;
-                            explanationElem.classList.add("show");
-                        }
-
-                        this.innerText = "Predicted";
                     })
-                    .catch(err => {
-                        predictionElem.innerHTML = "Prediction not available";
-                        explanationElem.innerHTML = "";
-                        this.disabled = false;
-                        this.innerText = "Predict Score";
-                        console.error("Prediction error:", err);
-                    });
+                    .catch(err => console.error(err));
             });
         });
-    });
-    function filterTeams() {
-        let input = document.getElementById('teamSearch');
-        let filter = input.value.toLowerCase();
-        let rows = document.querySelectorAll('.list-row');
 
-        rows.forEach(row => {
-            let rowText = row.innerText.toLowerCase();
-            if (rowText.includes(filter)) {
-                row.style.display = "flex";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    }
+    });
 </script>
 </body>
 </html>
