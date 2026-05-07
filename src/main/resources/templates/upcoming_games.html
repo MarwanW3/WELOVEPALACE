@@ -47,7 +47,7 @@
             <div class="prediction-section">
                 <div th:if="${match.predictedHomeScore != null}" class="server-mashup">
                     <p class="prediction show" th:text="${match.predictedHomeScore + ' - ' + match.predictedAwayScore}"></p>
-                    <p class="prediction-explanation show">Game prediction.</p>
+                    <p class="prediction-explanation show">Loading prediction.</p>
                 </div>
 
                 <div th:if="${match.predictedHomeScore == null}">
@@ -65,13 +65,25 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".list-row:not(.list-row-header)");
+
+        rows.forEach((row, index) => {
+            if (index >= 5) return;
+
+            const section = row.querySelector(".prediction-section");
+            if (section) {
+                section.innerHTML = `
+                <p class="prediction-explanation show">
+                    Loading AI predictions...
+                </p>
+            `;
+            }
+        });
 
 
         fetch("/api/matches/top5")
             .then(res => res.json())
             .then(matches => {
-
-                const rows = document.querySelectorAll(".list-row");
 
                 matches.forEach((match, index) => {
 
@@ -86,7 +98,7 @@
                         ${match.predictedHomeScore} - ${match.predictedAwayScore}
                     </p>
                     <p class="prediction-explanation show">
-                        AI Prediction
+                        ${match.explanation}
                     </p>
                 `;
 
@@ -96,10 +108,14 @@
 
             });
 
+
         const buttons = document.querySelectorAll(".predict-btn");
 
         buttons.forEach(button => {
             button.addEventListener("click", function () {
+
+                this.disabled = true;
+                this.innerText = "Loading AI Prediction...";
 
                 const index = this.getAttribute("data-index");
 
@@ -114,7 +130,12 @@
                         explanationElem.innerHTML = data.explanation;
 
                     })
-                    .catch(err => console.error(err));
+                    .catch(err => console.error(err))
+                    .finally(() => {
+                        this.innerText = "Predict Score";
+                        this.disabled = false;
+                });
+
             });
         });
 
