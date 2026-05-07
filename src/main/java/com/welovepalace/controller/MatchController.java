@@ -13,10 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class MatchController {
@@ -29,6 +26,7 @@ public class MatchController {
         this.footballApiService = footballApiService;
         this.openAiPredictionService = openAiPredictionService;
     }
+
     @GetMapping("/")
     public String getMatches(Model model) throws Exception {
         List<MatchDto> matches = footballApiService.getPremierLeagueMatches();
@@ -118,16 +116,6 @@ public class MatchController {
                 .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
                 .toList();
 
-        List<MatchDto> topThree = upcomingMatches.stream().limit(3).toList();
-        for (MatchDto match : topThree) {
-            try {
-                PredictionResultDto prediction = openAiPredictionService.predictScore(match, matches);
-                match.setPredictedHomeScore(prediction.getHomeScore());
-                match.setPredictedAwayScore(prediction.getAwayScore());
-            } catch (Exception e) {
-            }
-        }
-
         model.addAttribute("upcomingMatches", upcomingMatches);
         return "upcoming_games";
     }
@@ -144,5 +132,43 @@ public class MatchController {
 
         model.addAttribute("finishedMatches", finishedMatches);
         return "finished_games";
+    }
+
+    @GetMapping("/api/matches/top5")
+    @ResponseBody
+    public List<Map<String, Object>> getTop5MatchesWithPredictions() throws Exception {
+
+        List<MatchDto> matches = footballApiService.getPremierLeagueMatches();
+        if (matches == null) matches = new ArrayList<>();
+
+        List<MatchDto> upcomingMatches = matches.stream()
+                .filter(m -> !"FINISHED".equals(m.getStatus()))
+                .sorted((a, b) -> a.getUtcDate().compareTo(b.getUtcDate()))
+                .limit(5)
+                .toList();
+
+        List<Map<String, Object>> resultList = new ArrayList<>();
+
+
+        for (MatchDto match : upcomingMatches) {
+            try {
+                PredictionResultDto prediction =
+                        openAiPredictionService.predictScore(match, matches);
+
+                Map<String, Object> result = new HashMap<>();
+                result.put("homeTeam", match.getHomeTeam());
+                result.put("awayTeam", match.getAwayTeam());
+                result.put("predictedHomeScore", prediction.getHomeScore());
+                result.put("predictedAwayScore", prediction.getAwayScore());
+                result.put("explanation", prediction.getExplanation());
+
+                resultList.add(result);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultList;
     }
 }
