@@ -35,6 +35,13 @@ java -version
 gradle -v
 ```
 
+```markdown
+## 2.1 Database Configuration (Important)
+
+This project does not use a database. To prevent Spring Boot from trying to auto-configure a datasource, add to application.properties:
+```
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
 ---
 
 ## 3. API Keys (IMPORTANT)
