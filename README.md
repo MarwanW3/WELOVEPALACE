@@ -1,6 +1,6 @@
 # WELOVEPALACE
 
-A web application that displays Premier League matches and predicts scores using AI (OpenAI).
+A mashup web application that combines Premier League match data with AI-generated score predictions.
 
 ## Contributors
 
@@ -44,14 +44,25 @@ This project requires two API keys:
 - Football API: https://www.football-data.org/
 - OpenAI API: https://platform.openai.com/
 
-### IMPORTANT (Choose ONE of the following methods)
+The application uses environment variables for secure configuration.
 
-The application uses environment variables, not hardcoded keys.
+Required variables:
 
-To run the application you need to create a .env file with the following variables FOOTBALL_API_KEY=Your_Key_Here
-OPENAI_API_KEY=Your_Key_Here
+FOOTBALL_API_KEY=your_key_here  
+OPENAI_API_KEY=your_key_here
 
-If you do not set these correctly, the app will fail with errors like:
+You can configure these variables either:
+
+- directly in your terminal
+- in your IDE run configuration
+
+Example (IntelliJ):
+
+Run → Edit Configurations → Environment variables
+
+FOOTBALL_API_KEY=your_key;OPENAI_API_KEY=your_key
+
+If the variables are missing or incorrect, the application may fail with errors such as:
 
 - 401 Unauthorized
 - Could not resolve placeholder OPENAI_API_KEY
@@ -69,28 +80,28 @@ export FOOTBALL_API_KEY=your_football_api_key
 export OPENAI_API_KEY=your_openai_api_key
 ```
 
-Then run the application:
+To run the application:
 
 ```bash
+./gradlew build
 ./gradlew bootRun
 ```
 
 ---
 
-### Windows (PowerShell)
-
-Run:
+### Windows (Powershell)
 
 ```powershell
 setx FOOTBALL_API_KEY "your_football_api_key"
 setx OPENAI_API_KEY "your_openai_api_key"
 ```
 
-Then restart your terminal or IDE.
+Then restart your terminal or IDE for changes to take effect.
 
 Run the application:
 
 ```powershell
+gradlew.bat build
 gradlew.bat bootRun
 ```
 
@@ -105,9 +116,8 @@ Run → Edit Configurations → Environment variables
 Example:
 
 ```
-FOOTBALL_API_KEY=place_key;OPENAI_API_KEY=place_key
-
----
+FOOTBALL_API_KEY=your_key_here;OPENAI_API_KEY=your_key_here
+```
 
 ## 5. Open the application
 
@@ -122,8 +132,27 @@ http://localhost:8080
 Access the API documentation here:
 
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 ```
+### GET /api/matches/top5
+
+Returns the 5 upcoming Premier League matches together with AI-generated predictions and explanations.
+
+Response example:
+
+```json
+[
+  {
+    "homeTeam": "Arsenal",
+    "awayTeam": "Chelsea",
+    "predictedHomeScore": 2,
+    "predictedAwayScore": 1,
+    "explanation": "Arsenal has stronger recent form..."
+  }
+]
+```
+
+
 
 ---
 
